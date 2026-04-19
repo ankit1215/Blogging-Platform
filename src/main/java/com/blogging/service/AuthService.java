@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -31,15 +34,23 @@ public class AuthService {
         return "User Registered";
     }
 
-    public String login(LoginRequest req) {
+    public Map<String, Object> login(LoginRequest req) {
 
-        User user = userRepository.findByUsername(req.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    User user = userRepository.findByUsername(req.getUsername())
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!encoder.matches(req.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
-        }
-
-        return jwtUtil.generateToken(user);
+    if (!encoder.matches(req.getPassword(), user.getPassword())) {
+        throw new RuntimeException("Invalid password");
     }
+
+        String token = jwtUtil.generateToken(user);
+
+
+        Map<String, Object> response = new HashMap<>();
+    response.put("token", token);
+    response.put("username", user.getUsername());
+    response.put("role", user.getRole());
+
+    return response;
+}
 }

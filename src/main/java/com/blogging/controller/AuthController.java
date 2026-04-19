@@ -4,6 +4,7 @@ import com.blogging.dto.LoginRequest;
 import com.blogging.dto.RegisterRequest;
 import com.blogging.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest req){
-        return service.login(req);
+    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+        return ResponseEntity.ok(service.login(req));
     }
 }
