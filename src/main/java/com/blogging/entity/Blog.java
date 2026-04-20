@@ -13,8 +13,12 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    private String tags;
 
-    @Column(length = 3000)
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+
+    @Column(length = 5000)
     private String content;
     private LocalDateTime createdAt;
 
